@@ -8,10 +8,12 @@ on:
     branches: ["main"] # Standard CI trigger when main branch is pushed
 
 env:
-  IMAGE_TAG: "latest"
+  IMAGE_TAG: ${{ github.sha }}
   IMAGE_NAME: "nanomon"
-  REGISTRY: "bencacr2025.azurecr.io"
+  IMAGE_REG: "bencacr2025.azurecr.io"
   REGISTRY_USERNAME: "bencacr2025"
+  BUILD_INFO: "CI Build from GitHub Actions"
+  VERSION: ${{ github.sha }}
 
 # One job for building the app
 jobs:
