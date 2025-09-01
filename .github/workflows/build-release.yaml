@@ -42,3 +42,18 @@ jobs:
       - name: "Push images"
         run: |
           docker compose -f build/compose.yaml push api frontend runner
+  releaseJob:
+    name: "Release to Kubernetes"
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    needs: buildJob
+
+    steps:
+      - name: "Configure kubeconfig"
+        uses: azure/k8s-set-context@v4
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.CLUSTER_KUBECONFIG }}
+
+      - name: "Sanity check Kubernetes"
+        run: kubectl get nodes
