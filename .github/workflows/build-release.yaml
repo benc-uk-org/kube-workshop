@@ -8,12 +8,13 @@ on:
     branches: ["main"] # Standard CI trigger when main branch is pushed
 
 env:
-  IMAGE_TAG: ${{ github.sha }}
   IMAGE_NAME: "nanomon"
   IMAGE_REG: "bencacr2025.azurecr.io"
-  REGISTRY_USERNAME: "bencacr2025"
-  BUILD_INFO: "CI Build from GitHub Actions"
+  IMAGE_TAG: ${{ github.sha }}
   VERSION: ${{ github.sha }}
+  BUILD_INFO: "CI Build from GitHub Actions"
+  ACR_PASSWORD: "${{ secrets.ACR_PASSWORD }}"
+  ACR_USERNAME: "bencacr2025"
 
 # One job for building the app
 jobs:
@@ -30,3 +31,10 @@ jobs:
       - name: "Build images"
         run: |
           docker compose -f build/compose.yaml build
+
+      - name: "Login to ACR"
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.IMAGE_REG }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
