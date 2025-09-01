@@ -57,3 +57,14 @@ jobs:
 
       - name: "Sanity check Kubernetes"
         run: kubectl get nodes
+
+      - name: "Add Helm repo for Nanomon"
+        run: |
+          helm repo add nanomon 'https://raw.githubusercontent.com/benc-uk/nanomon/main/deploy/helm'
+          helm repo update nanomon
+
+      - name: "Release app with Helm"
+        run: |
+          helm upgrade ci nanomon/nanomon --install --wait --timeout 120s \
+          --set image.regRepo=${{ env.IMAGE_REG }} \
+          --set image.tag=${{ env.IMAGE_TAG }}
