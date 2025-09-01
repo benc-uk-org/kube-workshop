@@ -16,7 +16,9 @@ env:
   ACR_PASSWORD: "${{ secrets.ACR_PASSWORD }}"
   ACR_USERNAME: "bencacr2025"
 
-# One job for building the app
+# =================================================================
+# Build job to create and push Docker images
+# =================================================================
 jobs:
   buildJob:
     name: "Build & push images"
@@ -42,6 +44,10 @@ jobs:
       - name: "Push images"
         run: |
           docker compose -f build/compose.yaml push api frontend runner
+
+  # =================================================================
+  # Release job to deploy to Kubernetes cluster
+  # =================================================================
   releaseJob:
     name: "Release to Kubernetes"
     runs-on: ubuntu-latest
@@ -70,4 +76,5 @@ jobs:
         run: |
           helm upgrade ci nanomon/nanomon --install --wait --timeout 120s \
           --set image.regRepo=${{ env.IMAGE_REG }} \
-          --set image.tag=${{ env.IMAGE_TAG }}
+          --set image.tag=${{ env.IMAGE_TAG }} \
+          --set ingress.enabled=true
