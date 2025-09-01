@@ -47,6 +47,9 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/main' }}
     needs: buildJob
+    environment:
+      name: demo-environment
+      url: http://108.141.253.126
 
     steps:
       - name: "Configure kubeconfig"
