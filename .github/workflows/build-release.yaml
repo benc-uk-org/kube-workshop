@@ -78,3 +78,8 @@ jobs:
           --set image.regRepo=${{ env.IMAGE_REG }} \
           --set image.tag=${{ env.IMAGE_TAG }} \
           --set ingress.enabled=true
+
+      - name: "Validate deployment"
+        run: |
+          while ! curl -s http://108.141.253.126/api/status | grep "version\":\"${{ env.VERSION }}"; do sleep 5; done
+        timeout-minutes: 2
