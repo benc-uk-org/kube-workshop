@@ -28,9 +28,9 @@ jobs:
         with:
           repository: benc-uk/nanomon
 
-      # - name: "Build images"
-      #   run: |
-      #     docker compose -f build/compose.yaml build
+      - name: "Build images"
+        run: |
+          docker compose -f build/compose.yaml build api frontend runner
 
       - name: "Login to ACR"
         uses: docker/login-action@v3
@@ -38,3 +38,7 @@ jobs:
           registry: ${{ env.IMAGE_REG }}
           username: ${{ env.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: "Push images"
+        run: |
+          docker compose -f build/compose.yaml push api frontend runner
