@@ -7,6 +7,12 @@ on:
   push:
     branches: ["main"] # Standard CI trigger when main branch is pushed
 
+env:
+  IMAGE_TAG: "latest"
+  IMAGE_NAME: "nanomon"
+  REGISTRY: "bencacr2025.azurecr.io"
+  REGISTRY_USERNAME: "bencacr2025"
+
 # One job for building the app
 jobs:
   buildJob:
